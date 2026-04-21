@@ -1,2 +1,2 @@
 # Tutorial_Mujoco_RL
-A hands-on tutorial for MuJoCo + RL newbies, learn environment building, RL implementation from scratch with code.
+A practical tutorial for beginners to get started with MuJoCo and Reinforcement Learning, with simple code and detailed notes.
