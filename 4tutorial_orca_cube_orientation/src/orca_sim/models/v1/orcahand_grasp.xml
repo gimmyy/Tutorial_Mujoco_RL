@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<mujoco model="orcahand_right_complete">
+  <compiler angle="radian" eulerseq="XYZ" meshdir="assets/"/>
+  
+  <default>
+    <mesh scale="0.001 0.001 0.001"/>
+    <default class="right_visual_base">
+      <geom conaffinity="0" condim="1" contype="0" group="2" type="mesh"/>
+      <default class="right_skin">
+        <geom material="right_white"/>
+      </default>
+      <default class="right_bone">
+        <geom material="right_black"/>
+      </default>
+    </default>
+    <default class="right_collision">
+      <geom conaffinity="1" condim="4" contype="1" group="1" material="right_invisible" type="mesh" friction="1.2 0.005 0.0001"/>
+    </default>
+    <joint armature="0.001" damping="0.1" frictionloss="0.001" limited="true" margin="0.01"/>
+    <position ctrllimited="true" forcelimited="true" forcerange="-1 1" kp="15.0"/>
+  </default>
+
+  <asset>
+    <material name="right_white" rgba="1 1 1 1" shininess="0.5" specular="0.1"/>
+    <material name="right_black" rgba="0.25 0.25 0.25 1" shininess="0.2" specular="0.05"/>
+    <material name="right_invisible" rgba="1 1 1 0" shininess="0" specular="0"/>
+    
+    <mesh file="mjcf/right/right_visual_tower_main.stl" name="right_visual_tower_main_mesh"/>
+    <mesh file="mjcf/right/right_visual_tower_hull.stl" name="right_visual_tower_hull_mesh"/>
+    <mesh file="mjcf/right/right_visual_palm.stl" name="right_visual_palm_mesh"/>
+    <mesh file="mjcf/right/right_visual_thumb_dp.stl" name="right_visual_thumb_dp_mesh"/>
+    <mesh file="mjcf/right/right_visual_index_ip.stl" name="right_visual_index_ip_mesh"/>
+    <mesh file="mjcf/right/right_visual_middle_ip.stl" name="right_visual_middle_ip_mesh"/>
+    <mesh file="mjcf/right/right_visual_ring_ip.stl" name="right_visual_ring_ip_mesh"/>
+    <mesh file="mjcf/right/right_visual_pinky_ip.stl" name="right_visual_pinky_ip_mesh"/>
+    <mesh file="mjcf/right/right_collision_tower_main.stl" name="right_collision_tower_main_mesh"/>
+    <mesh file="mjcf/right/right_collision_palm.stl" name="right_collision_palm_mesh"/>
+  </asset>
+
+  <worldbody>
+    <light directional="true" diffuse=".6 .6 .6" pos="0 0 5" dir="0 0 -1"/>
+    <geom name="floor" pos="0 0 0" size="1 1 0.1" type="plane" rgba="0.8 0.8 0.8 1"/>
+
+    <body name="target_box" pos="0.06 0.02 0.025">
+        <joint type="free" damping="0.01"/>
+        <geom type="box" size="0.02 0.02 0.02" rgba="0 1 0 1" friction="1.5 0.005 0.0001" mass="0.05"/>
+    </body>
+
+    <body name="right_tower" pos="0.0 0.0 0.1" quat="1 0 0 -1">
+      <inertial mass="0.9" pos="0.04 -0.0009 0.019" diaginertia="0.0015 0.0012 0.0007"/>
+      <geom class="right_bone" mesh="right_visual_tower_main_mesh"/>
+      <geom class="right_collision" mesh="right_collision_tower_main_mesh"/>
+      
+      <body name="right_palm" pos="0.038 0.001 0.143">
+        <inertial mass="0.05" pos="0 0 0" diaginertia="1e-4 1e-4 1e-4"/>
+        <joint axis="1 0 0" name="right_wrist" range="-0.67 0.89" ref="-0.15"/>
+        <geom class="right_bone" mesh="right_visual_palm_mesh"/>
+        <geom class="right_collision" mesh="right_collision_palm_mesh"/>
+
+        <body name="right_thumb_mp" pos="-0.028 0.017 -0.013" euler="0.53 -0.05 -1.27">
+          <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+          <joint axis="0 0 -1" name="right_thumb_mcp" range="-0.87 0.87"/>
+          <body name="right_thumb_pp" pos="-0.03 0 0" euler="-1.22 0 0">
+            <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+            <joint axis="0 0.34 0.93" name="right_thumb_abd" range="-1.08 0"/>
+            <body name="right_thumb_ip" pos="0 0 0" euler="3.14 1.57 0">
+              <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+              <joint axis="0 -1 0" name="right_thumb_pip" range="-0.79 1.23"/>
+              <body name="right_thumb_dp" pos="0.0005 0 0.033">
+                <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+                <joint axis="0 -1 0" name="right_thumb_dip" range="-0.85 1.45"/>
+                <geom class="right_bone" mesh="right_visual_thumb_dp_mesh"/>
+                <geom name="thumb_tip_coll" type="capsule" size="0.009 0.01" pos="0 0 0.012" group="1" rgba="1 0 0 0.3"/>
+                <site name="T_thumb_tip" pos="0 0 0.02" size="0.003" group="4"/>
+              </body>
+            </body>
+          </body>
+        </body>
+
+        <body name="right_index_mp" pos="-0.032 0.002 0.043" euler="1.6 1.13 -0.05">
+          <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+          <joint axis="0 0 -1" name="right_index_abd" range="-1.04 0.24" ref="-0.4"/>
+          <body name="right_index_pp" pos="0 0 0" euler="0 -1.57 0">
+            <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+            <joint axis="0 -1 0" name="right_index_mcp" range="-0.34 1.65"/>
+            <body name="right_index_ip" pos="0.0005 0 0.038">
+              <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+              <joint axis="0 -1 0" name="right_index_pip" range="-0.34 1.88"/>
+              <geom class="right_bone" mesh="right_visual_index_ip_mesh"/>
+              <geom name="index_tip_coll" type="capsule" size="0.008 0.015" pos="0.001 0 0.018" group="1" rgba="1 0 0 0.3"/>
+              <site name="T_index_tip" pos="0.001 0 0.028" size="0.003" group="4"/>
+            </body>
+          </body>
+        </body>
+
+        <body name="right_middle_mp" pos="0 0 0.05" euler="1.57 1.57 0">
+          <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+          <joint axis="0 0 -1" name="right_middle_abd" range="-0.64 0.64"/>
+          <body name="right_middle_pp" pos="0 0 0" euler="0 -1.57 0">
+            <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+            <joint axis="0 -1 0" name="right_middle_mcp" range="-0.34 1.58"/>
+            <body name="right_middle_ip" pos="0.0005 0 0.046">
+              <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+              <joint axis="0 -1 0" name="right_middle_pip" range="-0.34 1.86"/>
+              <geom class="right_bone" mesh="right_visual_middle_ip_mesh"/>
+              <geom name="middle_tip_coll" type="capsule" size="0.008 0.015" pos="0.001 0 0.018" group="1" rgba="1 0 0 0.3"/>
+              <site name="T_middle_tip" pos="0.001 0 0.028" size="0.003" group="4"/>
+            </body>
+          </body>
+        </body>
+
+        <body name="right_ring_mp" pos="0.026 0.001 0.04" euler="-1.53 1.30 -3.05">
+          <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+          <joint axis="0 0 -1" name="right_ring_abd" range="-0.47 0.80" ref="0.17"/>
+          <body name="right_ring_pp" pos="0 0 0" euler="0 -1.57 0">
+            <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+            <joint axis="0 -1 0" name="right_ring_mcp" range="-0.34 1.58"/>
+            <body name="right_ring_ip" pos="0.0005 0 0.046">
+              <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+              <joint axis="0 -1 0" name="right_ring_pip" range="-0.34 1.86"/>
+              <geom class="right_bone" mesh="right_visual_ring_ip_mesh"/>
+              <geom name="ring_tip_coll" type="capsule" size="0.008 0.015" pos="0.001 0 0.018" group="1" rgba="1 0 0 0.3"/>
+              <site name="T_ring_tip" pos="0.001 0 0.028" size="0.003" group="4"/>
+            </body>
+          </body>
+        </body>
+
+        <body name="right_pinky_mp" pos="0.055 0.008 0.022" euler="-1.49 0.86 -2.88">
+          <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+          <joint axis="0 0 -1" name="right_pinky_abd" range="-0.12 1.16" ref="0.52"/>
+          <body name="right_pinky_pp" pos="0 0 0" euler="0 -1.57 0">
+            <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+            <joint axis="0 -1 0" name="right_pinky_mcp" range="-0.34 1.71"/>
+            <body name="right_pinky_ip" pos="0.0005 0 0.033">
+              <inertial mass="0.01" pos="0 0 0" diaginertia="1e-6 1e-6 1e-6"/>
+              <joint axis="0 -1 0" name="right_pinky_pip" range="-0.34 1.88"/>
+              <geom class="right_bone" mesh="right_visual_pinky_ip_mesh"/>
+              <geom name="pinky_tip_coll" type="capsule" size="0.008 0.015" pos="0.001 0 0.018" group="1" rgba="1 0 0 0.3"/>
+              <site name="T_pinky_tip" pos="0.001 0 0.028" size="0.003" group="4"/>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <position name="a_wrist" joint="right_wrist"/>
+    <position name="a_thumb_mcp" joint="right_thumb_mcp"/>
+    <position name="a_thumb_abd" joint="right_thumb_abd"/>
+    <position name="a_thumb_pip" joint="right_thumb_pip"/>
+    <position name="a_thumb_dip" joint="right_thumb_dip"/>
+    <position name="a_index_abd" joint="right_index_abd"/>
+    <position name="a_index_mcp" joint="right_index_mcp"/>
+    <position name="a_index_pip" joint="right_index_pip"/>
+    <position name="a_middle_abd" joint="right_middle_abd"/>
+    <position name="a_middle_mcp" joint="right_middle_mcp"/>
+    <position name="a_middle_pip" joint="right_middle_pip"/>
+    <position name="a_ring_abd" joint="right_ring_abd"/>
+    <position name="a_ring_mcp" joint="right_ring_mcp"/>
+    <position name="a_ring_pip" joint="right_ring_pip"/>
+    <position name="a_pinky_abd" joint="right_pinky_abd"/>
+    <position name="a_pinky_mcp" joint="right_pinky_mcp"/>
+    <position name="a_pinky_pip" joint="right_pinky_pip"/>
+  </actuator>
+
+  <sensor>
+    <touch name="S_thumb_touch" site="T_thumb_tip"/>
+    <touch name="S_index_touch" site="T_index_tip"/>
+    <touch name="S_middle_touch" site="T_middle_tip"/>
+    <touch name="S_ring_touch" site="T_ring_tip"/>
+    <touch name="S_pink_touch" site="T_pinky_tip"/>
+  </sensor>
+</mujoco>

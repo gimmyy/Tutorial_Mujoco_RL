@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<mujoco model="ORCA hand right ball grasp scene">
+
+  <include file="./scene.xml"/>
+  <include file="../../models/v1/right_cube_pick.mjcf"/>
+
+  <worldbody>
+    <!-- ====================== -->
+    <!-- ✅ 新增：稳固抓取桌面 -->
+    <!-- ====================== -->
+    <body name="table">
+      <geom 
+        name="table_top" 
+        type="box" 
+        pos="0.18 0 0.12"   
+        size="0.12 0.1 0.01"
+        rgba="0.3 0.5 0.7 1"
+        friction="1 0.6 0.6" />
+    </body>
+
+    <!-- ====================== -->
+    <!-- ✅ 小球：放在桌面正中央 -->
+    <!-- ====================== -->
+    <body name="task_cube" pos="0.1 -0.04 0.14">
+      <geom 
+        name="cube_geom" 
+        type="box" 
+        size="0.02 0.02 0.02" 
+        rgba="1.0 0.2 0.2 1"  
+        friction="1.0 0.1 0.1"
+        mass="0.05"
+      />
+    </body>
+  </worldbody>
+
+
+</mujoco>

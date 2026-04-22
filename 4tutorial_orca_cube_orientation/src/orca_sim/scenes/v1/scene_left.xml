@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<mujoco model="ORCA hand left scene">
+
+  <include file="./scene.xml"/>
+  <include file="../../models/v1/left.mjcf"/>
+
+</mujoco>
